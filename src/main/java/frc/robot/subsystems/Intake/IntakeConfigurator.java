@@ -39,13 +39,6 @@ public class IntakeConfigurator {
         intakeRollerConfig.Slot0.kS = 0.0;
         intakeRollerConfig.Slot0.kG = 0.0;
 
-
-        // intake pivot right config
-        intakeRightPivotConfig.CurrentLimits.SupplyCurrentLimit = 20;
-        intakeRightPivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        intakeRightPivotConfig.CurrentLimits.StatorCurrentLimit = 40;
-        intakeRightPivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-
         // set break mode and inversion
         intakeRightPivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;//BRAKE NORMALLY, BUT LANE IS GONNA FART
         intakeRightPivotConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -61,6 +54,7 @@ public class IntakeConfigurator {
 
         intakeRightPivotConfig.MotionMagic.MotionMagicAcceleration = 64*2;
         intakeRightPivotConfig.MotionMagic.MotionMagicCruiseVelocity = 128*2;
+        
 
         
 

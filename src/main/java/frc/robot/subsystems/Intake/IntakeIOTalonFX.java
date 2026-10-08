@@ -55,7 +55,9 @@ public class IntakeIOTalonFX implements IntakeIO {
 
           roller.getConfigurator().apply(config.intakeRollerConfig);
           pivot.getConfigurator().apply(config.intakeRightPivotConfig);
+          pivot.getConfigurator().apply(Constants.standardIntakeCurrentLimits);
           pivotfollower.getConfigurator().apply(config.intakeLeftPivotConfig);
+          pivotfollower.getConfigurator().apply(Constants.standardIntakeCurrentLimits);
 
           rollerfollower.setControl(followRoller);
           // pivotfollower.setControl(followPivot);
@@ -141,5 +143,15 @@ public class IntakeIOTalonFX implements IntakeIO {
           Intake.getInstance().alreadyZeroed = false;
         }
         return !pressed;
-    }
+     }
+
+     @Override
+     public TalonFX[] getTalonFXPivotMotors(){
+          return new TalonFX[] {pivot, pivotfollower};
+     }
+
+     @Override
+     public TalonFX[] getTalonFXRollerMotors(){
+          return new TalonFX[] {roller, rollerfollower};
+     }
 }

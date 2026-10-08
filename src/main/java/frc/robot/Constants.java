@@ -8,6 +8,7 @@
 package frc.robot;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -104,6 +105,20 @@ public final class Constants {
   public static final double maxVelocity = 3.75;// TODO
 
   public static boolean isZeroed = false;
+
+  public static double currentLimitTolerance = 1.0;
+
+  public static CurrentLimitsConfigs standardIntakeCurrentLimits = new CurrentLimitsConfigs()
+    .withStatorCurrentLimit(40.0)
+    .withStatorCurrentLimitEnable(true)
+    .withSupplyCurrentLimit(20.0)
+    .withSupplyCurrentLimitEnable(true);
+
+  public static CurrentLimitsConfigs limitedIntakeCurrentLimits = new CurrentLimitsConfigs()
+    .withStatorCurrentLimit(20.0)
+    .withStatorCurrentLimitEnable(true)
+    .withSupplyCurrentLimit(10.0)
+    .withSupplyCurrentLimitEnable(true);
 
   public static enum Mode {
     /** Running on a real robot. */

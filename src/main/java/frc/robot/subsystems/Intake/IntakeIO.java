@@ -2,6 +2,8 @@ package frc.robot.subsystems.Intake;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+
 //import com.revrobotics.
 
 /**As an interface, none of these variables work. Javadocs only apply to implementations.*/
@@ -60,5 +62,13 @@ public interface IntakeIO {
     /**@return true if it has finished.*/
     public default boolean zeroIntake(){
         return false;
+    }
+
+    public default TalonFX[] getTalonFXPivotMotors(){
+        return new TalonFX[] {};
+    }
+
+    public default TalonFX[] getTalonFXRollerMotors(){
+          return new TalonFX[] {};
     }
 }

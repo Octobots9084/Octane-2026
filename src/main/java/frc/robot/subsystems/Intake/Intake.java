@@ -2,8 +2,11 @@ package frc.robot.subsystems.Intake;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drive.SwerveStates;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Lights.LightAnimations;
@@ -29,7 +32,7 @@ public class Intake extends SubsystemBase {
     public IntakeStates currentState = IntakeStates.SAFE;
 
 
-     /**
+    /**
    * The wanted state of the intake, which the subsystem attempts to set the {@link #currentState} to
    *
    * <br></br><b>Default State</b> - {@link frc.robot.subsystems.Intake.IntakeStates#ZERO ZERO}
@@ -61,6 +64,9 @@ public class Intake extends SubsystemBase {
 
     /** Enabled at intake startup. */
     public boolean autoIntaked = false;
+
+    public boolean enteringNewState;
+
 
     /**
      * Create a new instance of Intake. <br></br>
@@ -100,7 +106,9 @@ public class Intake extends SubsystemBase {
 
     /** Internal helper method for #periodic(). */
     public void handleStateTransitions() {
-
+        if (currentState != wantedState){
+            enteringNewState =true;
+        }
         switch (wantedState) {
             case SAFE:
                 currentState = IntakeStates.SAFE;
@@ -156,6 +164,16 @@ public class Intake extends SubsystemBase {
                 currentState = IntakeStates.SAFE;
                 break;
 
+        }
+        if(currentState == wantedState){
+            enteringNewState = false;
+            if(Math.abs(currentState.intakePosition - io.getIntakePosition()) <= Constants.currentLimitTolerance){
+                io.getTalonFXPivotMotors()[0].getConfigurator().apply(Constants.limitedIntakeCurrentLimits);
+                io.getTalonFXPivotMotors()[1].getConfigurator().apply(Constants.limitedIntakeCurrentLimits);
+            }else{
+                io.getTalonFXPivotMotors()[0].getConfigurator().apply(Constants.standardIntakeCurrentLimits);
+                io.getTalonFXPivotMotors()[1].getConfigurator().apply(Constants.standardIntakeCurrentLimits);
+            }
         }
     }
     /** Internal helper method for #periodic(). */
