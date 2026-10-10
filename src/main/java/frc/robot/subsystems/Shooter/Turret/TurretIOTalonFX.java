@@ -78,7 +78,7 @@ public class TurretIOTalonFX implements TurretIO {
         //     turretMotor.setControl(turretRequest.withPosition(Constants.maxTurretAngle/(Math.PI*2)));
         // }else{   
         //     aimedToShoot = true;
-            turretMotor.setControl(turretRequest.withPosition(turretAngle));
+            // turretMotor.setControl(turretRequest.withPosition(turretAngle));
         // }
 
 
@@ -92,9 +92,9 @@ public class TurretIOTalonFX implements TurretIO {
 
     @Override
     public void setHoodPosition(double hoodAngle) {
-        hoodAngle = Math.max(hoodAngle, Constants.minimumHoodPosition);
-        hoodAngle = Math.min(hoodAngle, Constants.maximumHoodPosition);
-        hoodMotor.setControl(hoodRequest.withPosition(hoodAngle));
+        // hoodAngle = Math.max(hoodAngle, Constants.minimumHoodPosition);
+        // hoodAngle = Math.min(hoodAngle, Constants.maximumHoodPosition);
+        // hoodMotor.setControl(hoodRequest.withPosition(hoodAngle));
     }
 
     @Override

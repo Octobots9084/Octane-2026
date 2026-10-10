@@ -48,7 +48,7 @@ public class IntakeConfigurator {
 
         // set break mode and inversion
         intakeRightPivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;//BRAKE NORMALLY, BUT LANE IS GONNA FART
-        intakeRightPivotConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        intakeRightPivotConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         // create PID gains
         intakeRightPivotConfig.Slot0.kP = 8.0;
@@ -72,7 +72,7 @@ public class IntakeConfigurator {
 
         // set break mode and inversion
         intakeLeftPivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;//BRAKE NORMALLY, BUT LANE IS GONNA FART
-        intakeLeftPivotConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        intakeLeftPivotConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // create PID gains
         intakeLeftPivotConfig.Slot0.kP = 8.0;

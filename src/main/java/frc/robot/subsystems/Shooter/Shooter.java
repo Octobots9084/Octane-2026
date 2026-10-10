@@ -133,7 +133,7 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("Shooter/coDriverOverride", coDriverOverride);
         Logger.recordOutput("Shooter/flywheelOverride", flywheelOverride);
         double startTime = Timer.getFPGATimestamp();
-        ApplyStates();
+        // ApplyStates();
         handleStateTransitions();
         fIO.updateInputs(feederInputs);
         Logger.processInputs("Shooter/Feeder", feederInputs);
