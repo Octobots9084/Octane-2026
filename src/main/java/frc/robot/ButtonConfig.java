@@ -57,6 +57,7 @@ public class ButtonConfig {
 
         driverController.rightBumper().whileTrue(new runIntakeReverse());
         driverController.leftTrigger().onTrue(new InstantCommand(() -> {Intake.driverOverride = true;Intake.getInstance().wantedState=IntakeStates.INTAKING;})).onFalse(new InstantCommand(() -> {Intake.driverOverride = false;Intake.getInstance().wantedState=IntakeStates.EXTENDED;}));
+        driverController.povLeft().onTrue(new InstantCommand(()-> {SwerveSubsystem.getInstance().zeroGyro();}));
         // driverController.leftTrigger().onTrue(new InstantCommand(() -> {Intake.driverOverride = true;})).onFalse(new InstantCommand(() -> {Intake.driverOverride = false;}));
 
         // driverController.x().onTrue(new InstantCommand(() -> {

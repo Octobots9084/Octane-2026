@@ -390,6 +390,10 @@ public class SwerveSubsystem extends SubsystemBase {
         travelAngleLog.set(travelAngleLogArray);
     }
 
+    public void zeroGyro() {
+        io.zeroGyro();
+    }
+
     public void alignToTrenchEnterance () {
 
         double halfFieldY = 4;
