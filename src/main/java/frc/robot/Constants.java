@@ -125,11 +125,12 @@ public final class Constants {
   public static int verticalFeederID = 18;
   public static int gateFeederID = 15;
 
-  public static double turretZeroPosition = 200.25/360.0;
+  public static double turretZeroPosition = -90.0/360.0;
   public static double maximumHoodPosition = 77/360.0;
   public static double minimumHoodPosition = 58/360.0;
-  public static double maximumTurretPosition = 0.8; // TODO set this to an actual value so sinjin doesnt cry
-  public static double turretGearRatio = (60 / 14.0) * (156 / 20.0); //it is flipped to allign turret and gyro yaw rotation
+  public static double minimiumTurretPosition = 45/360.0;
+  public static double maximumTurretPosition = 585.5/360.0; // TODO set this to an actual value so sinjin doesnt cry
+  public static double turretGearRatio = 780.0/14; //it is flipped to allign turret and gyro yaw rotation
   public static double hoodGearRatio = 522/21.0;
 
   public static double flywheelGearRatio = 1;//29/33.0;

@@ -133,7 +133,7 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("Shooter/coDriverOverride", coDriverOverride);
         Logger.recordOutput("Shooter/flywheelOverride", flywheelOverride);
         double startTime = Timer.getFPGATimestamp();
-        // ApplyStates();
+        ApplyStates();
         handleStateTransitions();
         fIO.updateInputs(feederInputs);
         Logger.processInputs("Shooter/Feeder", feederInputs);
@@ -477,16 +477,35 @@ public class Shooter extends SubsystemBase {
             case HUB:
                 ferryOverride = false;
                 // if we're on our side of the field
-                // if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {// !tilted and in alliance
-                // if(swerve.isInAllianceZone()){
-                //     currentShooterState = ShooterStates.HUB;
-                // }else{
-                //     currentShooterState = ShooterStates.FERRY;
-                // }
-                currentShooterState = ShooterStates.HUB;
+                if (!swerve.isTilted(0, 3)) {// !tilted and in alliance
+                    if(swerve.isInAllianceZone()){
+                        currentShooterState = ShooterStates.HUB;
+                    }else{
+                        currentShooterState = ShooterStates.FERRY;
+                    }
+                }
                 break;
             case ZERO:
                 currentShooterState = ShooterStates.ZERO;
+                break;
+            case FERRY:
+                if (!swerve.isTilted(0, 3)) {// !tilted and in alliance
+                    if(swerve.isInAllianceZone()){
+                        currentShooterState = ShooterStates.HUB;
+                    }else{
+                        currentShooterState = ShooterStates.FERRY;
+                    }
+                }
+                break;
+            case TRENCH:
+                if (inEnterTrenchZone() && inTrenchDangerZone()){
+                    currentShooterState = ShooterStates.TRENCH;
+                }
+                break;
+            case BUMP:
+                if(swerve.isTilted(0,3) && !swerve.isInAllianceZone()){
+                    currentShooterState = ShooterStates.BUMP;
+                }
                 break;
             default:
                 currentShooterState = ShooterStates.HUB;
