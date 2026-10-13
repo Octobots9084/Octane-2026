@@ -120,8 +120,7 @@ public class IntakeIOTalonFX implements IntakeIO {
      }
 
      public boolean isZeroingSwitchPressed() {
-          // return zeroingSwitch.get();
-          return false;
+          return pivot.getTorqueCurrent().getValueAsDouble() > 15.0;
      }
 
      public boolean intakePivotStalled() {
@@ -130,16 +129,16 @@ public class IntakeIOTalonFX implements IntakeIO {
      }
 
      public boolean zeroIntake() {
-        boolean pressed = isZeroingSwitchPressed();
-        if (!pressed) {
+        boolean pressed = !isZeroingSwitchPressed();
+        if (pressed) {
             setRotateVoltage(0);
-            pivot.setPosition(0);
-            pivotfollower.setPosition(0);
+            pivot.setPosition(IntakeStates.EXTENDED.intakePosition);
+            pivotfollower.setPosition(IntakeStates.EXTENDED.intakePosition);
             Intake.getInstance().alreadyZeroed = true;
         } else {
           setRotateVoltage(-2);
           Intake.getInstance().alreadyZeroed = false;
         }
-        return !pressed;
+        return pressed;
     }
 }
