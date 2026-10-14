@@ -1,5 +1,8 @@
 package frc.robot.subsystems.Intake;
 
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.RPM;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.Follower;
@@ -120,7 +123,8 @@ public class IntakeIOTalonFX implements IntakeIO {
      }
 
      public boolean isZeroingSwitchPressed() {
-          return pivot.getTorqueCurrent().getValueAsDouble() > 15.0;
+          // return pivot.getTorqueCurrent().getValueAsDouble() > 15.0;
+          return (this.pivot.getStatorCurrent().getValue().in(Amps) > 20) && (Math.abs(this.pivot.getVelocity().getValue().in(RPM)) < 1); // If is more than 20 amps, and the motor isn't turning, assume we've hit the hard stop and are zeroed.
      }
 
      public boolean intakePivotStalled() {
@@ -131,12 +135,12 @@ public class IntakeIOTalonFX implements IntakeIO {
      public boolean zeroIntake() {
         boolean pressed = !isZeroingSwitchPressed();
         if (pressed) {
-            setRotateVoltage(0);
-            pivot.setPosition(IntakeStates.EXTENDED.intakePosition);
-            pivotfollower.setPosition(IntakeStates.EXTENDED.intakePosition);
+            setRotateVoltage(0); // Stop driving
+            pivot.setPosition(IntakeStates.EXTENDED.intakePosition); // Zero to extended
+            pivotfollower.setPosition(IntakeStates.EXTENDED.intakePosition); // Same
             Intake.getInstance().alreadyZeroed = true;
         } else {
-          setRotateVoltage(-2);
+          setRotateVoltage(-2); // Push the intake out
           Intake.getInstance().alreadyZeroed = false;
         }
         return pressed;
