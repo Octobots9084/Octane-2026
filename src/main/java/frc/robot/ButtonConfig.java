@@ -92,7 +92,7 @@ public class ButtonConfig {
 
         driverController.y().onTrue(new InstantCommand(() -> superstructure.wantedState = States.FIXEDFIRE)).onFalse(new InstantCommand(() -> superstructure.wantedState = States.SHOOTER));
 
-        driverController.a().onTrue(new InstantCommand(() -> superstructure.wantedState = States.FIXEDFIRE)).onFalse(new InstantCommand(() -> superstructure.wantedState = States.SHOOTER));
+        driverController.a().onTrue(new InstantCommand(() -> superstructure.wantedState = States.REVERSEFLYWHEEL));
 
         driverController.povDown().onTrue(new InstantCommand(() -> Shooter.getInstance().autoFlywheelStallFix = !Shooter.getInstance().autoFlywheelStallFix));
 
