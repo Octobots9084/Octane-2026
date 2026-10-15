@@ -419,21 +419,25 @@ public class Shooter extends SubsystemBase {
             case BUMP:
                 //figures out if were on our side our in the neutral zone and if were in auto
                 // if (!swerve.isTilted(0, 3)) { 
-                turret.setHoodPosition(Constants.maximumHoodPosition);
-                    if (swerve.isInAllianceZone()) {
-                        if (DriverStation.isAutonomousEnabled()){
-                        wantedShooterState = ShooterStates.AUTOHUB;
-                        } else{
-                        wantedShooterState = ShooterStates.HUB;
-                        }
-                    } else {
-                        if (DriverStation.isAutonomousEnabled()){
-                        wantedShooterState = ShooterStates.AUTONONFIRE;
-                        } else {
-                        // wantedShooterState = ShooterStates.FERRY;
-                        wantedShooterState = ShooterStates.HUB;
-                        }
-                    }
+
+
+                // turret.setHoodPosition(Constants.maximumHoodPosition);
+                //     if (swerve.isInAllianceZone()) {
+                //         if (DriverStation.isAutonomousEnabled()){
+                //         wantedShooterState = ShooterStates.AUTOHUB;
+                //         } else{
+                //         wantedShooterState = ShooterStates.HUB;
+                //         }
+                //     } else {
+                //         if (DriverStation.isAutonomousEnabled()){
+                //         wantedShooterState = ShooterStates.AUTONONFIRE;
+                //         } else {
+                //         // wantedShooterState = ShooterStates.FERRY;
+                //         wantedShooterState = ShooterStates.HUB;
+                //         }
+                //     }
+
+                currentShooterState = ShooterStates.HUB;
                 // }
                 break;
             case SPIT:
@@ -504,6 +508,8 @@ public class Shooter extends SubsystemBase {
                 break;
             case BUMP:
                 if(swerve.isTilted(0,3) && !swerve.isInAllianceZone()){
+                    currentShooterState = ShooterStates.BUMP;
+                }else{
                     currentShooterState = ShooterStates.BUMP;
                 }
                 break;

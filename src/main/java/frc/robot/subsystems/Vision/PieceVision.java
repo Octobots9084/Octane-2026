@@ -71,18 +71,18 @@ public class PieceVision {
     private int numTargets = 0;
 
     
-    public PieceVision(String photonCameraName, Transform3d robotToCamera) {
-        camera = new PhotonCamera(photonCameraName);
-        yawRotation = robotToCamera.getRotation().getZ();
-        xTransform = Math.abs(robotToCamera.getTranslation().getX());
-        this.intakeCameraPosition = robotToCamera;
-        Constants.centerToCameraDefaultPosition = robotToCamera;
-        // SmartDashboard.putNumber("roll", 0.66);
-        // SmartDashboard.putNumber("pitch", -9.5);
-        poses = new Translation3d[0];
-        // poses[0] = new Translation3d(1,2,0.1);
-        // poses[1] = new Translation3d(4,3,0.1);
-    }
+    // public PieceVision(String photonCameraName, Transform3d robotToCamera) {
+    //     camera = new PhotonCamera(photonCameraName);
+    //     yawRotation = robotToCamera.getRotation().getZ();
+    //     xTransform = Math.abs(robotToCamera.getTranslation().getX());
+    //     this.intakeCameraPosition = robotToCamera;
+    //     Constants.centerToCameraDefaultPosition = robotToCamera;
+    //     // SmartDashboard.putNumber("roll", 0.66);
+    //     // SmartDashboard.putNumber("pitch", -9.5);
+    //     poses = new Translation3d[0];
+    //     // poses[0] = new Translation3d(1,2,0.1);
+    //     // poses[1] = new Translation3d(4,3,0.1);
+    // }
 
 
     public void updateIntakeCameraPosition () {

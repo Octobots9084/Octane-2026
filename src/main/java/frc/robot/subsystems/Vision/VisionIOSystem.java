@@ -25,7 +25,7 @@ public class VisionIOSystem implements VisionIO {
     private final PhotonCamera[] cameras;
     // private final PhotonCamera intakeCamera;
     private final PhotonPoseEstimator[] photonEstimators;
-    public final PieceVision pieceAlignCamera = new PieceVision(Constants.pieceVisionCameraName, Constants.centerToCameraDefaultPosition);  //TODO change constatns
+    // public final PieceVision pieceAlignCamera = new PieceVision(Constants.pieceVisionCameraName, Constants.centerToCameraDefaultPosition);  //TODO change constatns
 
     private Matrix<N3, N1> curStdDevs;
     private final EstimateConsumer estConsumer;
@@ -72,8 +72,8 @@ public class VisionIOSystem implements VisionIO {
         inputs.rightCameraConected = cameras[3].isConnected();
         inputs.backCameraConected = cameras[4].isConnected();
         inputs.visonCycleTime = visonCycleTime;
-        inputs.pieceCameraHasTargets = pieceAlignCamera.hasTargets();
-        inputs.pieceCameraNumTargets = pieceAlignCamera.numTargets();
+        // inputs.pieceCameraHasTargets = pieceAlignCamera.hasTargets();
+        // inputs.pieceCameraNumTargets = pieceAlignCamera.numTargets();
     }
 
     public boolean CameraConnect(int camera){
@@ -325,7 +325,7 @@ public class VisionIOSystem implements VisionIO {
         public void accept(Pose2d pose, double timestamp, Matrix<N3, N1> estimationStdDevs);
     }
 
-    public PieceVision getPieceCamera () {
-        return pieceAlignCamera;
-    }
+    // public PieceVision getPieceCamera () {
+        // return pieceAlignCamera;
+    // }
 }

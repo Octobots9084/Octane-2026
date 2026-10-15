@@ -17,8 +17,8 @@ public interface VisionIO {
         public boolean frontRightCameraConected = false;
         public boolean leftCameraConected = false;
         public double visonCycleTime = -1;
-        public boolean pieceCameraHasTargets = false;
-        public int pieceCameraNumTargets = 0;
+        // public boolean pieceCameraHasTargets = false;
+        // public int pieceCameraNumTargets = 0;
     }
 
     public default boolean CameraConnect(int camera){
@@ -41,7 +41,7 @@ public interface VisionIO {
     public default void periodic() {
     }
 
-    public default PieceVision getPieceCamera () {
-        return null;
-    }
+    // public default PieceVision getPieceCamera () {
+    //     return null;
+    // }
 }

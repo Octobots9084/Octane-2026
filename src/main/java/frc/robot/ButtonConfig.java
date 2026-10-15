@@ -183,44 +183,44 @@ public class ButtonConfig {
         //         if (target != LightAnimations.INTAKING) Lights.getLightInstance().lightsCurrentState = target;
         // }));
 
-        driverController.povDown().onTrue(new InstantCommand(() -> {
-                hasTargets = Vision.getInstance().getPieceCamera().poses.length != 0;
-                if (hasTargets) {
-                        Translation3d[] posesLog = PieceVision.sortPosesByDistance(PieceVision.getCollectableFuel(poses));
-                        Translation3d[] pieceVisionPaths = new Translation3d[posesLog.length + 1];
-                        System.arraycopy(posesLog, 0, pieceVisionPaths, 1, posesLog.length);
-                        pieceVisionPaths[0] = new Translation3d(SwerveSubsystem.getInstance().getRobotPose().getTranslation());
-                        currentPieceVisionDrivePaths.set(pieceVisionPaths);
+        // driverController.povDown().onTrue(new InstantCommand(() -> {
+        //         hasTargets = Vision.getInstance().getPieceCamera().poses.length != 0;
+        //         if (hasTargets) {
+        //                 Translation3d[] posesLog = PieceVision.sortPosesByDistance(PieceVision.getCollectableFuel(poses));
+        //                 Translation3d[] pieceVisionPaths = new Translation3d[posesLog.length + 1];
+        //                 System.arraycopy(posesLog, 0, pieceVisionPaths, 1, posesLog.length);
+        //                 pieceVisionPaths[0] = new Translation3d(SwerveSubsystem.getInstance().getRobotPose().getTranslation());
+        //                 currentPieceVisionDrivePaths.set(pieceVisionPaths);
 
-                        SwerveSubsystem.getInstance().io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, 0))
-                                .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
-                        // bestPlaceToGo = Vision.getInstance().getPieceCamera().bestPlaceToGo();
-                        lastSwerveWantedState = SwerveSubsystem.getInstance().wantedState;
-                        lastSwerveCurrentState = SwerveSubsystem.getInstance().currentState;
-                        SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
-                        SwerveSubsystem.getInstance().currentState = SwerveStates.AUTODRIVE;
-                        Intake.getInstance().wantedState = IntakeStates.INTAKING;
-                }
-        }))
-        .whileTrue(new InstantCommand(() -> {
-                if (hasTargets) {
-                        SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
-                        SwerveSubsystem.getInstance().collectFuels();
-                }
-        }))
-        .onFalse(new InstantCommand(() -> {
-                if (hasTargets) {
-                        if (SwerveSubsystem.getInstance().currentPieceVisionDriveCommand != null) {
-                                SwerveSubsystem.getInstance().currentPieceVisionDriveCommand.cancel();
-                        }
-                        SwerveSubsystem.getInstance().wantedState = lastSwerveWantedState;
-                        SwerveSubsystem.getInstance().currentState = lastSwerveCurrentState;
-                        poses = null;
-                        Intake.getInstance().wantedState = IntakeStates.SAFE;
-                        // bestPlaceToGo = null;
-                        currentPieceVisionDrivePaths.set(new Translation3d[0]);
-                }
-        }));
+        //                 SwerveSubsystem.getInstance().io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, 0))
+        //                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+        //                 // bestPlaceToGo = Vision.getInstance().getPieceCamera().bestPlaceToGo();
+        //                 lastSwerveWantedState = SwerveSubsystem.getInstance().wantedState;
+        //                 lastSwerveCurrentState = SwerveSubsystem.getInstance().currentState;
+        //                 SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
+        //                 SwerveSubsystem.getInstance().currentState = SwerveStates.AUTODRIVE;
+        //                 Intake.getInstance().wantedState = IntakeStates.INTAKING;
+        //         }
+        // }))
+        // .whileTrue(new InstantCommand(() -> {
+        //         if (hasTargets) {
+        //                 SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
+        //                 SwerveSubsystem.getInstance().collectFuels();
+        //         }
+        // }))
+        // .onFalse(new InstantCommand(() -> {
+        //         if (hasTargets) {
+        //                 if (SwerveSubsystem.getInstance().currentPieceVisionDriveCommand != null) {
+        //                         SwerveSubsystem.getInstance().currentPieceVisionDriveCommand.cancel();
+        //                 }
+        //                 SwerveSubsystem.getInstance().wantedState = lastSwerveWantedState;
+        //                 SwerveSubsystem.getInstance().currentState = lastSwerveCurrentState;
+        //                 poses = null;
+        //                 Intake.getInstance().wantedState = IntakeStates.SAFE;
+        //                 // bestPlaceToGo = null;
+        //                 currentPieceVisionDrivePaths.set(new Translation3d[0]);
+        //         }
+        // }));
 
         driverController.povRight().onTrue(new InstantCommand(() -> {
                         lastSwerveWantedState = SwerveSubsystem.getInstance().wantedState;
