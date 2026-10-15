@@ -53,10 +53,172 @@ public class ButtonConfig {
     public void initTeleop() {
         intake = Intake.getInstance();
         
-        // driverController.leftTrigger().onTrue(new SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
 
         driverController.rightBumper().whileTrue(new runIntakeReverse());
         driverController.leftTrigger().onTrue(new InstantCommand(() -> {Intake.driverOverride = true;Intake.getInstance().wantedState=IntakeStates.INTAKING;})).onFalse(new InstantCommand(() -> {Intake.driverOverride = false;Intake.getInstance().wantedState=IntakeStates.EXTENDED;}));
+        
+        driverController.x().onTrue(new InstantCommand(() -> {
+                intake.wantedState = IntakeStates.ZEROBUTITDOESNTBREAK;
+        })).onFalse(new InstantCommand(() -> {
+                intake.wantedState = IntakeStates.BEYONDMAX;
+        }));
+
+        driverController.rightTrigger(0.5).onTrue(new SetStateShooter());
+        driverController.rightTrigger(0.5).onTrue(new InstantCommand(
+                () -> Shooter.driverOverride = true))
+                .onFalse(new InstantCommand(
+                        () -> Shooter.driverOverride = false)).onFalse(new InstantCommand(() -> {Shooter.flywheelDebouncer = Shooter.flywheelToleranceThreshold;}));
+        
+        driverController.a().onTrue(new ToggleAutoFerry());
+
+        
+        driverController.povUp().onTrue(new InstantCommand(
+                () -> {
+                        Shooter.flywheelOverride = true;
+                })).onFalse(new InstantCommand(() -> {
+                        Shooter.flywheelOverride = false;
+                }));
+
+        driverController.leftBumper().onTrue( new InstantCommand( () -> {
+                intake.wantedState = IntakeStates.INTAKING;
+                Intake.driverElephantiasisPart2Override = true;
+        })).onFalse( new InstantCommand( () -> {
+                Intake.driverElephantiasisPart2Override = false;
+        }));
+        
+        driverController.b().onTrue(new InstantCommand(() -> {
+                intake.wantedState = IntakeStates.SAFE;
+        }));
+
+        driverController.y().onTrue(new InstantCommand(() -> superstructure.wantedState = States.FIXEDFIRE)).onFalse(new InstantCommand(() -> superstructure.wantedState = States.SHOOTER));
+
+        driverController.a().onTrue(new InstantCommand(() -> superstructure.wantedState = States.FIXEDFIRE)).onFalse(new InstantCommand(() -> superstructure.wantedState = States.SHOOTER));
+
+        driverController.povDown().onTrue(new InstantCommand(() -> Shooter.getInstance().autoFlywheelStallFix = !Shooter.getInstance().autoFlywheelStallFix));
+
+        // driverController.povDown().onTrue(new InstantCommand(() -> {//piece vision
+        //         hasTargets = Vision.getInstance().getPieceCamera().poses.length != 0;
+        //         if (hasTargets) {
+        //                 Translation3d[] posesLog = PieceVision.sortPosesByDistance(PieceVision.getCollectableFuel(poses));
+        //                 Translation3d[] pieceVisionPaths = new Translation3d[posesLog.length + 1];
+        //                 System.arraycopy(posesLog, 0, pieceVisionPaths, 1, posesLog.length);
+        //                 pieceVisionPaths[0] = new Translation3d(SwerveSubsystem.getInstance().getRobotPose().getTranslation());
+        //                 currentPieceVisionDrivePaths.set(pieceVisionPaths);
+
+        //                 SwerveSubsystem.getInstance().io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, 0))
+        //                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+        //                 // bestPlaceToGo = Vision.getInstance().getPieceCamera().bestPlaceToGo();
+        //                 lastSwerveWantedState = SwerveSubsystem.getInstance().wantedState;
+        //                 lastSwerveCurrentState = SwerveSubsystem.getInstance().currentState;
+        //                 SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
+        //                 SwerveSubsystem.getInstance().currentState = SwerveStates.AUTODRIVE;
+        //                 Intake.getInstance().wantedState = IntakeStates.INTAKING;
+        //         }
+        // }))
+        // .whileTrue(new InstantCommand(() -> {
+        //         if (hasTargets) {
+        //                 SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
+        //                 SwerveSubsystem.getInstance().collectFuels();
+        //         }
+        // }))
+        // .onFalse(new InstantCommand(() -> {
+        //         if (hasTargets) {
+        //                 if (SwerveSubsystem.getInstance().currentPieceVisionDriveCommand != null) {
+        //                         SwerveSubsystem.getInstance().currentPieceVisionDriveCommand.cancel();
+        //                 }
+        //                 SwerveSubsystem.getInstance().wantedState = lastSwerveWantedState;
+        //                 SwerveSubsystem.getInstance().currentState = lastSwerveCurrentState;
+        //                 poses = null;
+        //                 Intake.getInstance().wantedState = IntakeStates.SAFE;
+        //                 // bestPlaceToGo = null;
+        //                 currentPieceVisionDrivePaths.set(new Translation3d[0]);
+        //         }
+        // })); 
+
+        driverController.povRight().onTrue(new InstantCommand(() -> {//trench align
+                        lastSwerveWantedState = SwerveSubsystem.getInstance().wantedState;
+                        lastSwerveCurrentState = SwerveSubsystem.getInstance().currentState;
+                        // SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
+                        // SwerveSubsystem.getInstance().currentState = SwerveStates.AUTODRIVE;
+                        SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
+                        SwerveSubsystem.getInstance().currentState = SwerveStates.AUTODRIVE;
+                        SwerveSubsystem.getInstance().alignToTrenchEnterance();
+                        CommandScheduler.getInstance().schedule(SwerveSubsystem.getInstance().currentTrenchAlignCommand);
+        }))
+        .whileTrue(new InstantCommand(() -> {
+        }))
+        .onFalse(new InstantCommand(() -> {
+                // endTrenchAlign();
+                
+                if (SwerveSubsystem.getInstance().currentTrenchAlignCommand != null) {
+                        SwerveSubsystem.getInstance().currentTrenchAlignCommand.cancel();
+                }
+
+                SwerveSubsystem.getInstance().wantedState = lastSwerveWantedState;
+                SwerveSubsystem.getInstance().currentState = lastSwerveCurrentState;
+        }));
+
+
+
+
+
+
+
+
+
+
+
+        coDriverController.x().onTrue(new InstantCommand(() -> Superstructure.getInstance().wantedState = States.ZERO));
+        coDriverController.rightTrigger(0.5).onTrue(new SetStateShooter());
+        coDriverController.rightTrigger(0.5).onTrue(new InstantCommand(
+                () -> Shooter.driverOverride = true))
+                .onFalse(new InstantCommand(() -> Shooter.driverOverride = false)).onFalse(new InstantCommand(() -> {Shooter.flywheelDebouncer = Shooter.flywheelToleranceThreshold;}));
+                        
+        coDriverController.b().onTrue(new InstantCommand(
+                () -> {
+                        Shooter.flywheelOverride = true;
+                })).onFalse(new InstantCommand(() -> {
+                        Shooter.flywheelOverride = false;
+                }));
+
+        coDriverController.a().onTrue(new ToggleAutoFerry());
+        
+        //         //if commands not null, and command is not done, align.
+        //         //command is done if 
+        //         SmartDashboard.putBoolean("startTrenchAlign", startTrenchAlign);
+        //         SmartDashboard.putBoolean("stopTrenchAlign", stopTrenchAlign);
+                // if (SwerveSubsystem.getInstance().currentTrenchAlignCommand != null && SwerveSubsystem.getInstance().currentTrenchAlignCommand.isFinished()) {
+                        // if (SwerveSubsystem.getInstance().currentTrenchAlignCommand != null) {
+                        //         SwerveSubsystem.getInstance().currentTrenchAlignCommand.cancel();
+                        // }
+
+                        // SwerveSubsystem.getInstance().wantedState = lastSwerveWantedState;
+                        // SwerveSubsystem.getInstance().currentState = lastSwerveCurrentState;
+                        // SmartDashboard.putBoolean("trenchcommanddone", SwerveSubsystem.getInstance().currentTrenchAlignCommand);
+                        
+                // }
+
+                // if (SwerveSubsystem.getInstance().getRobotPose().getTranslation().getDistance(SwerveSubsystem.getInstance().currentTrenchAlignCommand.))
+                
+        //         if (startTrenchAlign && SwerveSubsystem.getInstance().currentTrenchAlignCommand == null) {
+        //                 endTrenchAlign();
+        //         }
+                
+                
+        //         if (!stopTrenchAlign) {
+        //         }
+        //         // if (SwerveSubsystem.getInstance().currentTrenchAlignCommand != null && SwerveSubsystem.getInstance().currentTrenchAlignCommand.isFinished()) {
+        //         //         endTrenchAlign();
+        //         // }
+        //         // if (command is done and start) {
+        //         //         endTrenchAlign();
+        //         // }
+        //         //         if ( &&  && startTrenchAlign) {
+                                
+        //         //         } else {
+        //         //         }
+        // driverController.leftTrigger().onTrue(new SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
+
         // driverController.leftTrigger().onTrue(new InstantCommand(() -> {Intake.driverOverride = true;})).onFalse(new InstantCommand(() -> {Intake.driverOverride = false;}));
 
         // driverController.x().onTrue(new InstantCommand(() -> {
@@ -65,17 +227,12 @@ public class ButtonConfig {
         //         superstructure.wantedState = States.SHOOTER;
         // }));
 
-        driverController.x().onTrue(new InstantCommand(() -> {
-                intake.wantedState = IntakeStates.ZEROBUTITDOESNTBREAK;
-        })).onFalse(new InstantCommand(() -> {
-                intake.wantedState = IntakeStates.BEYONDMAX;
-        }));
 
         // driverController.b().onTrue(new InstantCommand(() -> {
         //         if (SwerveSubsystem.getInstance().wantedState == SwerveStates.ROTATION_LOCK) {
         //                 SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL;
         //         } else {
-                        SwerveSubsystem.getInstance().wantedState = SwerveStates.ROTATION_LOCK;
+                        // SwerveSubsystem.getInstance().wantedState = SwerveStates.ROTATION_LOCK;
         //         }
         // }));
 
@@ -90,49 +247,10 @@ public class ButtonConfig {
         // coDriverController.y().onTrue(new InstantCommand(() ->
         // {Shooter.getInstance().manuelFlywheel-=0.25;}));
         //TODO add back
-        driverController.rightTrigger(0.5).onTrue(new SetStateShooter());
-        driverController.rightTrigger(0.5).onTrue(new InstantCommand(
-                () -> Shooter.driverOverride = true))
-                .onFalse(new InstantCommand(
-                        () -> Shooter.driverOverride = false)).onFalse(new InstantCommand(() -> {Shooter.flywheelDebouncer = Shooter.flywheelToleranceThreshold;}));
-
-    
-        coDriverController.x().onTrue(new InstantCommand(() -> Superstructure.getInstance().wantedState = States.ZERO));
-        coDriverController.rightTrigger(0.5).onTrue(new SetStateShooter());
-        coDriverController.rightTrigger(0.5).onTrue(new InstantCommand(
-                () -> Shooter.driverOverride = true))
-                .onFalse(new InstantCommand(
-                        () -> Shooter.driverOverride = false)).onFalse(new InstantCommand(() -> {Shooter.flywheelDebouncer = Shooter.flywheelToleranceThreshold;}));
-
-        driverController.a().onTrue(new ToggleAutoFerry());
-
-        coDriverController.b().onTrue(new InstantCommand(
-                () -> {
-                        Shooter.flywheelOverride = true;
-                })).onFalse(new InstantCommand(() -> {
-                        Shooter.flywheelOverride = false;
-                }));
-        driverController.povUp().onTrue(new InstantCommand(
-                () -> {
-                        Shooter.flywheelOverride = true;
-                })).onFalse(new InstantCommand(() -> {
-                        Shooter.flywheelOverride = false;
-                }));
-
-        driverController.leftBumper().onTrue( new InstantCommand( () -> {
-                intake.wantedState = IntakeStates.INTAKING;
-                Intake.driverElephantiasisPart2Override = true;
-        })).onFalse( new InstantCommand( () -> {
-                Intake.driverElephantiasisPart2Override = false;
-        }));
-        coDriverController.a().onTrue(new ToggleAutoFerry());
         
-        driverController.b().onTrue(new InstantCommand(() -> {
-                intake.wantedState = IntakeStates.SAFE;
-        }));
+        
 
         //coDriverController.leftTrigger(0.5).onTrue(new SetStateSafe());
-        driverController.y().onTrue(new InstantCommand(() -> superstructure.wantedState = States.FIXEDFIRE)).onFalse(new InstantCommand(() -> superstructure.wantedState = States.SHOOTER));
         
 
         //X : TODO add unstuck
@@ -182,101 +300,7 @@ public class ButtonConfig {
         //         if (target != LightAnimations.INTAKING) Lights.getLightInstance().lightsCurrentState = target;
         // }));
 
-        driverController.povDown().onTrue(new InstantCommand(() -> {
-                hasTargets = Vision.getInstance().getPieceCamera().poses.length != 0;
-                if (hasTargets) {
-                        Translation3d[] posesLog = PieceVision.sortPosesByDistance(PieceVision.getCollectableFuel(poses));
-                        Translation3d[] pieceVisionPaths = new Translation3d[posesLog.length + 1];
-                        System.arraycopy(posesLog, 0, pieceVisionPaths, 1, posesLog.length);
-                        pieceVisionPaths[0] = new Translation3d(SwerveSubsystem.getInstance().getRobotPose().getTranslation());
-                        currentPieceVisionDrivePaths.set(pieceVisionPaths);
-
-                        SwerveSubsystem.getInstance().io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, 0))
-                                .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
-                        // bestPlaceToGo = Vision.getInstance().getPieceCamera().bestPlaceToGo();
-                        lastSwerveWantedState = SwerveSubsystem.getInstance().wantedState;
-                        lastSwerveCurrentState = SwerveSubsystem.getInstance().currentState;
-                        SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
-                        SwerveSubsystem.getInstance().currentState = SwerveStates.AUTODRIVE;
-                        Intake.getInstance().wantedState = IntakeStates.INTAKING;
-                }
-        }))
-        .whileTrue(new InstantCommand(() -> {
-                if (hasTargets) {
-                        SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
-                        SwerveSubsystem.getInstance().collectFuels();
-                }
-        }))
-        .onFalse(new InstantCommand(() -> {
-                if (hasTargets) {
-                        if (SwerveSubsystem.getInstance().currentPieceVisionDriveCommand != null) {
-                                SwerveSubsystem.getInstance().currentPieceVisionDriveCommand.cancel();
-                        }
-                        SwerveSubsystem.getInstance().wantedState = lastSwerveWantedState;
-                        SwerveSubsystem.getInstance().currentState = lastSwerveCurrentState;
-                        poses = null;
-                        Intake.getInstance().wantedState = IntakeStates.SAFE;
-                        // bestPlaceToGo = null;
-                        currentPieceVisionDrivePaths.set(new Translation3d[0]);
-                }
-        }));
-
-        driverController.povRight().onTrue(new InstantCommand(() -> {
-                        lastSwerveWantedState = SwerveSubsystem.getInstance().wantedState;
-                        lastSwerveCurrentState = SwerveSubsystem.getInstance().currentState;
-                        // SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
-                        // SwerveSubsystem.getInstance().currentState = SwerveStates.AUTODRIVE;
-                        SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
-                        SwerveSubsystem.getInstance().currentState = SwerveStates.AUTODRIVE;
-                        SwerveSubsystem.getInstance().alignToTrenchEnterance();
-                        CommandScheduler.getInstance().schedule(SwerveSubsystem.getInstance().currentTrenchAlignCommand);
-        }))
-        .whileTrue(new InstantCommand(() -> {
-        //         //if commands not null, and command is not done, align.
-        //         //command is done if 
-        //         SmartDashboard.putBoolean("startTrenchAlign", startTrenchAlign);
-        //         SmartDashboard.putBoolean("stopTrenchAlign", stopTrenchAlign);
-                // if (SwerveSubsystem.getInstance().currentTrenchAlignCommand != null && SwerveSubsystem.getInstance().currentTrenchAlignCommand.isFinished()) {
-                        // if (SwerveSubsystem.getInstance().currentTrenchAlignCommand != null) {
-                        //         SwerveSubsystem.getInstance().currentTrenchAlignCommand.cancel();
-                        // }
-
-                        // SwerveSubsystem.getInstance().wantedState = lastSwerveWantedState;
-                        // SwerveSubsystem.getInstance().currentState = lastSwerveCurrentState;
-                        // SmartDashboard.putBoolean("trenchcommanddone", SwerveSubsystem.getInstance().currentTrenchAlignCommand);
-                        
-                // }
-
-                // if (SwerveSubsystem.getInstance().getRobotPose().getTranslation().getDistance(SwerveSubsystem.getInstance().currentTrenchAlignCommand.))
-                
-        //         if (startTrenchAlign && SwerveSubsystem.getInstance().currentTrenchAlignCommand == null) {
-        //                 endTrenchAlign();
-        //         }
-                
-                
-        //         if (!stopTrenchAlign) {
-        //         }
-        //         // if (SwerveSubsystem.getInstance().currentTrenchAlignCommand != null && SwerveSubsystem.getInstance().currentTrenchAlignCommand.isFinished()) {
-        //         //         endTrenchAlign();
-        //         // }
-        //         // if (command is done and start) {
-        //         //         endTrenchAlign();
-        //         // }
-        //         //         if ( &&  && startTrenchAlign) {
-                                
-        //         //         } else {
-        //         //         }
-        }))
-        .onFalse(new InstantCommand(() -> {
-                // endTrenchAlign();
-                
-                if (SwerveSubsystem.getInstance().currentTrenchAlignCommand != null) {
-                        SwerveSubsystem.getInstance().currentTrenchAlignCommand.cancel();
-                }
-
-                SwerveSubsystem.getInstance().wantedState = lastSwerveWantedState;
-                SwerveSubsystem.getInstance().currentState = lastSwerveCurrentState;
-        }));
+        
 
         // driverController.povDown().onTrue(new InstantCommand(() -> {
         //         SwerveSubsystem.getInstance().io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, 0))

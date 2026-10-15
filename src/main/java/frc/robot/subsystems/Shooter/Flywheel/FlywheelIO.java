@@ -11,8 +11,10 @@ public interface FlywheelIO {
     // public double FlywheelLeftRPS = 0.0;
     // public double FlywheelLeftMotorTemp = 0.0;
     public double FlywheelRightRPS = 0.0;
-    public double flywheelRightVoltage = 0.0;
+    public double flywheelRightVelocity = 0.0;
     public double flywheelRightCurrent = 0.0;
+    public double flywheelRightVoltage = 0.0;
+    public double flywheelRightDutyCycle = 0.0;
     // public double FlywheelRightMotorTemp = 0.0;
     // public double FlywheelLeftCurrent = 0.0;
     // public double FlywheelRightCurrent = 0.0;
@@ -29,6 +31,14 @@ public interface FlywheelIO {
   }
 
   public default double getRightMotorVelocity() {
+    return 0;
+  }
+
+  public default double getRightMotorStatorCurrent() {
+    return 0;
+  }
+
+  public default double getRightMotorDutyCycle() {
     return 0;
   }
 

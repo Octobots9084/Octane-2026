@@ -84,6 +84,9 @@ public class Shooter extends SubsystemBase {
     public double ferryBallSpeed = 6.7;
     public double ferryFlywheelSpeed = 10;
 
+    public ShooterStates oldCurrentState = ShooterStates.SAFE;
+    public boolean autoFlywheelStallFix = true;
+
     public Pose2d aimpose;
 
     public static int flywheelToleranceThreshold = 10;
@@ -132,7 +135,14 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("Shooter/driverOverride", driverOverride);
         Logger.recordOutput("Shooter/coDriverOverride", coDriverOverride);
         Logger.recordOutput("Shooter/flywheelOverride", flywheelOverride);
+        Logger.recordOutput("Shooter/autoFlywheelStallFix", autoFlywheelStallFix);
+        Logger.recordOutput("Shooter/flywheelStalling", flywheelStalling());
         double startTime = Timer.getFPGATimestamp();
+        if (autoFlywheelStallFix && flywheelStalling()) {
+            oldCurrentState = currentShooterState;
+            wantedShooterState = ShooterStates.REVERSEFLYWHEEL;
+            currentShooterState = ShooterStates.REVERSEFLYWHEEL;
+        }
         ApplyStates();
         handleStateTransitions();
         fIO.updateInputs(feederInputs);
@@ -312,6 +322,11 @@ public class Shooter extends SubsystemBase {
                         }
                     }
                 break;
+            case REVERSEFLYWHEEL:
+                isAimedAtHub = isAimedAtHub();
+                feeder.setFeederVelocity(FeederStates.OFF);
+                flywheel.setFlywheelVelocity(FlywheelStates.REVERSEFLYWHEEL);
+                break;
             case TRENCH:
              //7.5
                 currentShooterState = ShooterStates.HUB;
@@ -485,6 +500,9 @@ public class Shooter extends SubsystemBase {
                 // }
                 currentShooterState = ShooterStates.HUB;
                 break;
+            case REVERSEFLYWHEEL:
+                currentShooterState = ShooterStates.REVERSEFLYWHEEL;
+                break;
             case ZERO:
                 currentShooterState = ShooterStates.ZERO;
                 break;
@@ -505,6 +523,18 @@ public class Shooter extends SubsystemBase {
         else{
             feeder.setFeederVelocity(FeederStates.OFF);
         }
+    }
+
+    public boolean flywheelStalling() {
+        double statorCurrent = Math.abs(flywheel.io.getRightMotorStatorCurrent());
+        double velocityRps = Math.abs(flywheel.io.getRightMotorVelocity());
+        double dutyCycle = Math.abs(flywheel.io.getRightMotorDutyCycle());
+
+        boolean highCurrent = statorCurrent > 50.0;
+        boolean commandingPower = dutyCycle > 0.2;
+        boolean lowVelocity = velocityRps < 2.0;
+
+        return highCurrent && commandingPower && lowVelocity;
     }
 
     /**

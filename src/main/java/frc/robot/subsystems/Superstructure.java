@@ -76,6 +76,12 @@ public class Superstructure extends SubsystemBase {
                     currentState = States.SAFE;
                 // }
                 break;
+            case REVERSEFLYWHEEL:
+                if(currentState != States.REVERSEFLYWHEEL){
+                    shooter.wantedShooterState = ShooterStates.REVERSEFLYWHEEL;
+                }
+                // currentState = States.REVERSEFLYWHEEL;
+                break;
             case SHOOTER:
                 if(currentState != States.SHOOTER){
                     shooter.wantedShooterState = ShooterStates.HUB;
@@ -139,6 +145,9 @@ public class Superstructure extends SubsystemBase {
                 break;
             case SHOOTER:
                 stateSHOOTER();
+                break;
+            case REVERSEFLYWHEEL:
+                // shooter.wantedShooterState = ShooterStates.REVERSEFLYWHEEL;
                 break;
             case ZERO:
                 //Lights.getLightInstance().lightsWantedState = LightAnimations.ZEROED;

@@ -26,6 +26,7 @@ public class FlywheelIOTalonFX implements FlywheelIO {
     private final StatusSignal<AngularVelocity> flywheelVelocity;
     private final StatusSignal<Voltage> flywheelVoltage;
     private final StatusSignal<Current> flywheelCurrent;
+    private final StatusSignal<Double> flywheelDutyCycle;
 
     public static TalonFX FlywheelLeftMotor;
     public static TalonFX FlywheelRightMotor;
@@ -48,6 +49,7 @@ public class FlywheelIOTalonFX implements FlywheelIO {
         flywheelVelocity = FlywheelRightMotor.getVelocity();
         flywheelCurrent = FlywheelRightMotor.getStatorCurrent();
         flywheelVoltage = FlywheelRightMotor.getMotorVoltage();
+        flywheelDutyCycle = FlywheelRightMotor.getDutyCycle();
 
         PhoenixUtil.tryUntilOk(5, () -> BaseStatusSignal.setUpdateFrequencyForAll(50,flywheelVelocity));
         PhoenixUtil.tryUntilOk(5, () -> FlywheelRightMotor.optimizeBusUtilization(0,1.0));
@@ -63,8 +65,10 @@ public class FlywheelIOTalonFX implements FlywheelIO {
     public void updateInputs(FlywheelIOInputs inputs) {
         inputs.flywheelCurrentState = Flywheel.getInstance().getCurrentState();
         inputs.FlywheelRightRPS = getRightMotorVelocity();
-        inputs.flywheelRightCurrent = flywheelCurrent.getValueAsDouble();
+        inputs.flywheelRightVelocity = flywheelVelocity.getValueAsDouble();
         inputs.flywheelRightVoltage = flywheelVoltage.getValueAsDouble();
+        inputs.flywheelRightCurrent = flywheelCurrent.getValueAsDouble();
+        inputs.flywheelRightDutyCycle = flywheelDutyCycle.getValueAsDouble();
         inputs.flywheelWantedSpeed = targetRPS;
     }
 
@@ -83,6 +87,14 @@ public class FlywheelIOTalonFX implements FlywheelIO {
 
     public double getRightMotorVelocity() {
         return flywheelVelocity.getValueAsDouble();
+    }
+
+    public double getRightMotorStatorCurrent() {
+        return flywheelCurrent.getValueAsDouble();
+    }
+
+    public double getRightMotorDutyCycle() {
+        return flywheelDutyCycle.getValueAsDouble();
     }
 
     @Override
