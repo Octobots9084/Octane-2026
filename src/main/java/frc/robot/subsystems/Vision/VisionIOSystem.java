@@ -23,9 +23,7 @@ import frc.robot.Constants;
 
 public class VisionIOSystem implements VisionIO {
     private final PhotonCamera[] cameras;
-    // private final PhotonCamera intakeCamera;
     private final PhotonPoseEstimator[] photonEstimators;
-    // public final PieceVision pieceAlignCamera = new PieceVision(Constants.pieceVisionCameraName, Constants.centerToCameraDefaultPosition);  //TODO change constatns
 
     private Matrix<N3, N1> curStdDevs;
     private final EstimateConsumer estConsumer;
@@ -37,14 +35,8 @@ public class VisionIOSystem implements VisionIO {
     public static PIDController yPidcontroller = new PIDController(2,0.2,0.01);
     public static PIDController angularPidcontroller = new PIDController(3, 0.5, 0);
 
-    // // Simulation
-    // private PhotonCameraSim cameraSim;
-    // private VisionSystemSim visionSim;
 
     public VisionIOSystem(EstimateConsumer estConsumer) {
-        // intakeCamera = new PhotonCamera(Constants.intakeCameraName);
-        // intakeCamera.setDriverMode(true);
-        // CameraServer.startAutomaticCapture(Constants.intakeCameraName, "/dev/video0");
         cameras = new PhotonCamera[] {
             new PhotonCamera(Constants.frontRightCameraName), 
             new PhotonCamera(Constants.frontleftCameraName),
@@ -65,15 +57,12 @@ public class VisionIOSystem implements VisionIO {
 
     @Override
     public void updateInputs(VisionIOInputs inputs) {
-        // inputs.intakeCameraConected = intakeCamera.isConnected();
         inputs.frontRightCameraConected = cameras[0].isConnected();
         inputs.frontLeftCameraConected = cameras[1].isConnected();
         inputs.leftCameraConected = cameras[2].isConnected();
         inputs.rightCameraConected = cameras[3].isConnected();
         inputs.backCameraConected = cameras[4].isConnected();
         inputs.visonCycleTime = visonCycleTime;
-        // inputs.pieceCameraHasTargets = pieceAlignCamera.hasTargets();
-        // inputs.pieceCameraNumTargets = pieceAlignCamera.numTargets();
     }
 
     public boolean CameraConnect(int camera){
@@ -324,8 +313,4 @@ public class VisionIOSystem implements VisionIO {
     public static interface EstimateConsumer {
         public void accept(Pose2d pose, double timestamp, Matrix<N3, N1> estimationStdDevs);
     }
-
-    // public PieceVision getPieceCamera () {
-        // return pieceAlignCamera;
-    // }
 }

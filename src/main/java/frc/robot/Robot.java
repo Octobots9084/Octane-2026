@@ -29,7 +29,6 @@ import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
 import frc.robot.subsystems.Shooter.Turret.Turret;
 import frc.robot.subsystems.Shooter.Turret.TurretIO;
-import frc.robot.subsystems.Vision.PieceVision;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIOSystem;
 import frc.robot.subsystems.Vision.VisionIO.VisionIOInputs;
@@ -158,10 +157,6 @@ public class Robot extends LoggedRobot {
 
     // Return to non-RT thread priority (do not modify the first argument)
     // Threads.setCurrentThreadPriority(false, 10);
-    Vision.getInstance().getPieceCamera().cycle();
-    swerve.bestPlaceToGo = Vision.getInstance().getPieceCamera().bestPlaceToGo();
-
-    swerve.pieceVisionPath = swerve.createPathsToPos(PieceVision.sortPosesByDistance(PieceVision.getCollectableFuel(Vision.getInstance().getPieceCamera().poses)));
   }
 
   /** This function is called once when the robot is disabled. */

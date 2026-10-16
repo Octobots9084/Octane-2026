@@ -24,7 +24,6 @@ import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Shooter.Shooter;
-import frc.robot.subsystems.Vision.PieceVision;
 import frc.robot.subsystems.Vision.Vision;
 
 public class DriverCommunications {
@@ -120,26 +119,6 @@ public class DriverCommunications {
         autoDriveLocation.accept(new Pose3d(SwerveSubsystem.getInstance().bestPlaceToGo.getX(),SwerveSubsystem.getInstance().bestPlaceToGo.getY(), 0.2, new Rotation3d()));
         else
         autoDriveLocation.accept(new Pose3d(0,0, 2, new Rotation3d()));
-
-        //SmartDashboard.putBoolean("In Manual?", Superstructure.getInstance().getCurrentState() == States.MANUAL);
-        //SmartDashboard.putBoolean("Can Shoot", Shooter.getInstance().Shootable());
-        // SmartDashboard.putBoolean("hasTargetjjj", ButtonConfig.hasTarget);
-        // Translation3d[] poses = PieceVision.sortPosesByDistance(PieceVision.getCollectableFuel(Vision.getInstance().getPieceCamera().poses));
-        // if (poses == null) {
-        //     poses = new Translation3d[0];
-        // }
-        // Translation3d[] pieceVisionPaths = new Translation3d[poses.length + 1];
-        // System.arraycopy(poses, 0, pieceVisionPaths, 1, poses.length);
-        // pieceVisionPaths[0] = new Translation3d(SwerveSubsystem.getInstance().getRobotPose().getTranslation());
-        // bestPieceVisionDrivePaths.set(pieceVisionPaths);
-        // SmartDashboard.putBoolean("hasTargets", ButtonConfig.hasTargets);
-        // SmartDashboard.putNumber("idkL", Vision.getInstance().getPieceCamera().poses.length);
-        // idk.set(Vision.getInstance().getPieceCamera().poses);
-        // try {
-        // best.set(SwerveSubsystem.getInstance().pieceVisionPath.getPathPoses().toArray(new Pose2d[0]));
-        // } catch (Exception e) {
-        //     best.set(new Pose2d[0]);
-        // }
     }    
 
 

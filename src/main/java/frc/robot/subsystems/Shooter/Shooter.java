@@ -233,7 +233,7 @@ public class Shooter extends SubsystemBase {
                     }
                 }else{
                     if(!inEnterTrenchZone()){
-                    wantedShooterState = ShooterStates.BUMP;
+                        wantedShooterState = ShooterStates.BUMP;
                     }
                 }
                 break;
@@ -339,6 +339,13 @@ public class Shooter extends SubsystemBase {
                 }
 
                 break;
+            case BUMP:
+                if(swerve.isInAllianceZone()){
+                    wantedShooterState = ShooterStates.HUB;
+                }else{
+                    wantedShooterState = ShooterStates.FERRY;
+                }
+                break;
             case AUTOHUB:
             isAimedAtHub = isAimedAtHub();
 
@@ -368,7 +375,11 @@ public class Shooter extends SubsystemBase {
                     }
 
                 }else{
-                    wantedShooterState = ShooterStates.BUMP;
+                    if(!inEnterTrenchZone()){
+                        wantedShooterState = ShooterStates.BUMP;
+                    }else if(inEnterTrenchZone() && inTrenchDangerZone()){
+                        wantedShooterState = ShooterStates.TRENCH;
+                    }
                     //Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
 
                 }
@@ -405,7 +416,9 @@ public class Shooter extends SubsystemBase {
                     }
 
                 }else{
-                    wantedShooterState = ShooterStates.BUMP;
+                    if(!inEnterTrenchZone()){
+                        wantedShooterState = ShooterStates.BUMP;
+                    }
                     //Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
 
                 }
@@ -415,30 +428,6 @@ public class Shooter extends SubsystemBase {
 
                 flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                 turret.setHoodPosition(Constants.maximumHoodPosition);
-                break;
-            case BUMP:
-                //figures out if were on our side our in the neutral zone and if were in auto
-                // if (!swerve.isTilted(0, 3)) { 
-
-
-                // turret.setHoodPosition(Constants.maximumHoodPosition);
-                //     if (swerve.isInAllianceZone()) {
-                //         if (DriverStation.isAutonomousEnabled()){
-                //         wantedShooterState = ShooterStates.AUTOHUB;
-                //         } else{
-                //         wantedShooterState = ShooterStates.HUB;
-                //         }
-                //     } else {
-                //         if (DriverStation.isAutonomousEnabled()){
-                //         wantedShooterState = ShooterStates.AUTONONFIRE;
-                //         } else {
-                //         // wantedShooterState = ShooterStates.FERRY;
-                //         wantedShooterState = ShooterStates.HUB;
-                //         }
-                //     }
-
-                currentShooterState = ShooterStates.HUB;
-                // }
                 break;
             case SPIT:
                 //shoot but slower
@@ -507,10 +496,10 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case BUMP:
-                if(swerve.isTilted(0,3) && !swerve.isInAllianceZone()){
-                    currentShooterState = ShooterStates.BUMP;
-                }else{
-                    currentShooterState = ShooterStates.BUMP;
+                if (swerve.isInAllianceZone()) {
+                    currentShooterState = ShooterStates.HUB;
+                } else {
+                    currentShooterState = ShooterStates.FERRY;
                 }
                 break;
             default:
