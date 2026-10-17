@@ -22,6 +22,7 @@ public interface IntakeIO {
         public boolean pivotLimitSwitch = false;
         public double rollerVoltage;
         public boolean intakePivotStalled;
+        public double pivotVelocity;
     }
 
     /** The mechanism by which values are updated with.*/

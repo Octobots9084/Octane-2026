@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Intake;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.Follower;
@@ -11,6 +13,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import Utils.FPGA.currentTime;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -36,6 +39,8 @@ public class IntakeIOTalonFX implements IntakeIO {
      public TalonFX rollerfollower;
      private VelocityVoltage rollerRequest = new VelocityVoltage(0);
      private MotionMagicVoltage pivotRequest = new MotionMagicVoltage(0);
+
+     private Debouncer zeroDebouncer = new Debouncer(0.2, Debouncer.DebounceType.kBoth);
 
      // private Follower followPivot = new Follower(Constants.intakePivotID, MotorAlignmentValue.Opposed);
      private Follower followRoller = new Follower(Constants.intakeRollerID, MotorAlignmentValue.Opposed);
@@ -89,6 +94,7 @@ public class IntakeIOTalonFX implements IntakeIO {
           inputs.pivotCurrent = pivotCurrent.getValueAsDouble();
           inputs.pivotLimitSwitch = this.isZeroingSwitchPressed();
           inputs.intakePivotStalled = this.intakePivotStalled();
+          inputs.pivotVelocity = pivot.getVelocity().getValueAsDouble();
      }
 
      @Override
@@ -130,16 +136,32 @@ public class IntakeIOTalonFX implements IntakeIO {
      }
 
      public boolean zeroIntake() {
-        boolean pressed = isZeroingSwitchPressed();
-        if (!pressed) {
-            setRotateVoltage(0);
-            pivot.setPosition(0);
-            pivotfollower.setPosition(0);
-            Intake.getInstance().alreadyZeroed = true;
-        } else {
-          setRotateVoltage(-2);
-          Intake.getInstance().alreadyZeroed = false;
-        }
-        return !pressed;
+     //    boolean pressed = isZeroingSwitchPressed();
+     //    if (!pressed) {
+          //   setRotateVoltage(0);
+     //        pivot.setPosition(0);
+     //        pivotfollower.setPosition(0);
+     //        Intake.getInstance().alreadyZeroed = true;
+     //    } else {
+     //      setRotateVoltage(-2);
+     //      Intake.getInstance().alreadyZeroed = false;
+     //    }
+     //    return !pressed;
+
+          pivot.setVoltage(1);
+          pivotfollower.setVoltage(1);
+
+          if (intakeStalling()) {
+               Intake.getInstance().alreadyZeroed = true;
+               pivot.setPosition(12);
+               pivotfollower.setPosition(12);
+               return true;
+          }
+
+          return false;
+     }
+
+    public boolean intakeStalling () {
+          return zeroDebouncer.calculate(Math.abs(pivot.getVelocity().getValueAsDouble()) < 2 && Math.abs(pivot.getStatorCurrent().getValueAsDouble()) > 30); 
     }
 }

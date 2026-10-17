@@ -47,12 +47,12 @@ public class IntakeConfigurator {
         intakeRightPivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
-        intakeRightPivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;//BRAKE NORMALLY, BUT LANE IS GONNA FART
+        intakeRightPivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;//BRAKE NORMALLY, BUT LANE IS GONNA FART
         intakeRightPivotConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         // create PID gains
-        intakeRightPivotConfig.Slot0.kP = 8.0;
-        intakeRightPivotConfig.Slot0.kI = 0.1;
+        intakeRightPivotConfig.Slot0.kP = 3.0;
+        intakeRightPivotConfig.Slot0.kI = 0.2;
         intakeRightPivotConfig.Slot0.kD = 0.0;
         intakeRightPivotConfig.Slot0.kA = 0.0;
         intakeRightPivotConfig.Slot0.kV = 0.0;
@@ -71,12 +71,12 @@ public class IntakeConfigurator {
         intakeLeftPivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
-        intakeLeftPivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;//BRAKE NORMALLY, BUT LANE IS GONNA FART
+        intakeLeftPivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;//BRAKE NORMALLY, BUT LANE IS GONNA FART
         intakeLeftPivotConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // create PID gains
-        intakeLeftPivotConfig.Slot0.kP = 8.0;
-        intakeLeftPivotConfig.Slot0.kI = 0.1;
+        intakeLeftPivotConfig.Slot0.kP = 3.0;
+        intakeLeftPivotConfig.Slot0.kI = 0.2;
         intakeLeftPivotConfig.Slot0.kD = 0.0;
         intakeLeftPivotConfig.Slot0.kA = 0.0;
         intakeLeftPivotConfig.Slot0.kV = 0.0;
