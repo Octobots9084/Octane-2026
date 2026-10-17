@@ -104,6 +104,11 @@ public class SwerveSubsystem extends SubsystemBase {
     public static boolean pieceVision = false; //TODO piecevis
     //we need to figure out what to call it on
     // The robot pose estimator for tracking swerve odometry and applying vision corrections.
+    
+    //maxaccel
+    private double lastVx = 0, lastVy = 0;
+    private static final double kMaxAccel = 12; // m/s^2
+    private static final double kDt = 0.02;
 
     public static PIDController angularPidcontroller = new PIDController(3, 0.5, 0);
 
@@ -508,10 +513,12 @@ public class SwerveSubsystem extends SubsystemBase {
 
         double angularVelocity = angularMagnitude * maxAngularVelocity;
 
+        double[] v = limitAccel(xVelocity, yVelocity);
+
         if (Constants.isBlueAlliance) {   
-            return new ChassisSpeeds(-xVelocity, -yVelocity, angularVelocity);
+            return new ChassisSpeeds(-v[0], -v[1], angularVelocity);
         }
-        return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);
+        return new ChassisSpeeds(v[0], v[1], angularVelocity);
     }
     
     public double getXToTarget(double poseX){
@@ -774,6 +781,23 @@ public class SwerveSubsystem extends SubsystemBase {
 
     //     return false;
     // }
+
+    private double[] limitAccel(double vx, double vy) {
+        double dx = vx - lastVx;
+        double dy = vy - lastVy;
+        double dist = Math.hypot(dx, dy);
+        double maxDelta = kMaxAccel * kDt;
+        if (dist > maxDelta) {
+            double scale = maxDelta / dist;
+            dx *= scale;
+            dy *= scale;
+        }
+        lastVx += dx;
+        lastVy += dy;
+        return new double[] {lastVx, lastVy};
+    }
+
+
 
     public PathPlannerPath createPathsToPos(Translation3d[] poses) {
         PathConstraints constraints = new PathConstraints(0.5, 0.5, 0.5 * Math.PI, 0.5 * Math.PI);
