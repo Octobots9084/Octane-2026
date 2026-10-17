@@ -38,7 +38,7 @@ public class VisionIOSystem implements VisionIO {
 
     public VisionIOSystem(EstimateConsumer estConsumer) {
         cameras = new PhotonCamera[] {
-            new PhotonCamera(Constants.frontRightCameraName), 
+            // new PhotonCamera(Constants.frontRightCameraName), 
             new PhotonCamera(Constants.frontleftCameraName),
             new PhotonCamera(Constants.leftCameraName), 
             new PhotonCamera(Constants.rightCameraName), 
@@ -46,7 +46,7 @@ public class VisionIOSystem implements VisionIO {
         };
 
         photonEstimators = new PhotonPoseEstimator[] {
-            new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFrontRight), 
+            // new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFrontRight), 
             new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFrontLeft),
             new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamLeft),
             new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamRight),  
@@ -57,11 +57,15 @@ public class VisionIOSystem implements VisionIO {
 
     @Override
     public void updateInputs(VisionIOInputs inputs) {
-        inputs.frontRightCameraConected = cameras[0].isConnected();
-        inputs.frontLeftCameraConected = cameras[1].isConnected();
-        inputs.leftCameraConected = cameras[2].isConnected();
-        inputs.rightCameraConected = cameras[3].isConnected();
-        inputs.backCameraConected = cameras[4].isConnected();
+        // inputs.frontRightCameraConected = cameras[0].isConnected();
+        // inputs.frontLeftCameraConected = cameras[1].isConnected();
+        // inputs.leftCameraConected = cameras[2].isConnected();
+        // inputs.rightCameraConected = cameras[3].isConnected();
+        // inputs.backCameraConected = cameras[4].isConnected();
+        inputs.frontLeftCameraConected = cameras[0].isConnected();
+        inputs.leftCameraConected = cameras[1].isConnected();
+        inputs.rightCameraConected = cameras[2].isConnected();
+        inputs.backCameraConected = cameras[3].isConnected();
         inputs.visonCycleTime = visonCycleTime;
     }
 

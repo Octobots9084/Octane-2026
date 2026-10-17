@@ -106,11 +106,15 @@ public class DriverCommunications {
         SmartDashboard.putNumber("Timer", Constants.timer.get());
         SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
         SmartDashboard.putBoolean("Hub Activity", Shooter.getInstance().isHubActive());
-        SmartDashboard.putBoolean("Cam/Front Right", Vision.getInstance().io.CameraConnect(0));
-        SmartDashboard.putBoolean("Cam/Front Left", Vision.getInstance().io.CameraConnect(1));
-        SmartDashboard.putBoolean("Cam/Left", Vision.getInstance().io.CameraConnect(2));
-        SmartDashboard.putBoolean("Cam/Right", Vision.getInstance().io.CameraConnect(3));
-        SmartDashboard.putBoolean("Cam/Back", Vision.getInstance().io.CameraConnect(4));
+        // SmartDashboard.putBoolean("Cam/Front Right", Vision.getInstance().io.CameraConnect(0));
+        // SmartDashboard.putBoolean("Cam/Front Left", Vision.getInstance().io.CameraConnect(1));
+        // SmartDashboard.putBoolean("Cam/Left", Vision.getInstance().io.CameraConnect(2));
+        // SmartDashboard.putBoolean("Cam/Right", Vision.getInstance().io.CameraConnect(3));
+        // SmartDashboard.putBoolean("Cam/Back", Vision.getInstance().io.CameraConnect(4));
+        SmartDashboard.putBoolean("Cam/Front Left", Vision.getInstance().io.CameraConnect(0));
+        SmartDashboard.putBoolean("Cam/Left", Vision.getInstance().io.CameraConnect(1));
+        SmartDashboard.putBoolean("Cam/Right", Vision.getInstance().io.CameraConnect(2));
+        SmartDashboard.putBoolean("Cam/Back", Vision.getInstance().io.CameraConnect(3));
         SmartDashboard.putNumber("teleopTimer", TeleopTimer);
         SmartDashboard.putBoolean("hasAutoDriveTarget", hasAutoDriveTarget);
 

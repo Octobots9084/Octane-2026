@@ -52,7 +52,7 @@ public final class Constants {
   public static final double TurretAngleFromCenter = -2.1524498;
   public static final String pieceVisionCameraName = "pieceVisionCamera";
 
-  public static final String frontRightCameraName = "FrontRightCamera";
+  // public static final String frontRightCameraName = "FrontRightCamera";
   public static final String frontleftCameraName = "FrontLeftCamera";
   public static final String rightCameraName = "RightCamera";
   public static final String leftCameraName = "LeftCamera";

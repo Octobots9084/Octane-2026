@@ -14,7 +14,7 @@ public interface VisionIO {
         public boolean backCameraConected = false;
         public boolean rightCameraConected = false;
         public boolean frontLeftCameraConected = false;
-        public boolean frontRightCameraConected = false;
+        // public boolean frontRightCameraConected = false;
         public boolean leftCameraConected = false;
         public double visonCycleTime = -1;
     }
