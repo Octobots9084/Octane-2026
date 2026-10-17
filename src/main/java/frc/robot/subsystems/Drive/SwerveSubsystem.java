@@ -227,6 +227,8 @@ public class SwerveSubsystem extends SubsystemBase {
       
       NamedCommands.registerCommand("DepotShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTODEPOTSHOOT;}).asProxy());
         
+      NamedCommands.registerCommand("SafeIntake", new InstantCommand(() -> {Intake.getInstance().wantedState = IntakeStates.SAFE;}));
+        
         NamedCommands.registerCommand("StartIntake", 
             new SequentialCommandGroup(
                 new WaitUntilCommand(() -> Intake.getInstance().alreadyZeroed),//so it doedsnt override auto init wanted=zero
