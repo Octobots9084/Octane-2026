@@ -467,6 +467,15 @@ public class Shooter extends SubsystemBase {
         if ((currentShooterState == ShooterStates.AUTOHUB || currentShooterState == ShooterStates.AUTODEPOTSHOOT) && wantedShooterState != currentShooterState)
             flywheelDebouncer = flywheelToleranceThreshold;
         switch (wantedShooterState) {
+            case AUTOHUB:
+                currentShooterState = ShooterStates.AUTOHUB;
+                break;
+            case AUTODEPOTSHOOT:
+                currentShooterState = ShooterStates.AUTODEPOTSHOOT;
+                break;
+            case AUTONONFIRE:
+                currentShooterState = ShooterStates.AUTONONFIRE;
+                break;
             case HUB:
                 ferryOverride = false;
                 // if we're on our side of the field
