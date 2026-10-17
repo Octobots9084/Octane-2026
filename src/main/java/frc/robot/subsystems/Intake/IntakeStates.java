@@ -17,7 +17,7 @@ package frc.robot.subsystems.Intake;
 
 public enum IntakeStates {
     INTAKING(40, 10),//0,3.65
-    AUTOINTAKING(55, 10),
+    AUTOINTAKING(40, 10),
     EXTENDED(0, 10),
     PARTIALEXTENTION(15,6),//was 5
     LESSPARTIALEXTENTION(15,8),
