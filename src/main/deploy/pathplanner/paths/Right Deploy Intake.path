@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 3.6,
-        "y": 0.53
+        "y": 0.5300000000000002
       },
       "prevControl": null,
       "nextControl": {
         "x": 3.35,
-        "y": 0.53
+        "y": 0.5300000000000002
       },
       "isLocked": false,
-      "linkedName": "right trench shoot"
+      "linkedName": null
     },
     {
       "anchor": {
         "x": 3.3016555555555556,
-        "y": 0.53
+        "y": 0.5300000000000002
       },
       "prevControl": {
         "x": 3.5516555555555556,
-        "y": 0.53
+        "y": 0.5300000000000002
       },
       "nextControl": null,
       "isLocked": false,

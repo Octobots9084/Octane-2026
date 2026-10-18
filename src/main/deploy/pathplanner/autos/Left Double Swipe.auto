@@ -7,13 +7,31 @@
         {
           "type": "named",
           "data": {
+            "name": "StartShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Wait Left Start Q122"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "StartIntake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left Sweep 1"
+            "pathName": "Wait Left Sweep Q122"
           }
         },
         {

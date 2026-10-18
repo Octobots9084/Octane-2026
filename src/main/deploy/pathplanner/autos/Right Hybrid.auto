@@ -7,6 +7,24 @@
         {
           "type": "named",
           "data": {
+            "name": "StartShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Wait Right Start Q122"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "StartIntake"
           }
         },
