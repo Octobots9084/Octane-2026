@@ -396,10 +396,16 @@ public class ButtonConfig {
         //         superstructure.wantedState = States.SHOOTER;
         // }));
 
-        driverController.x().onTrue(new InstantCommand(() -> {
-                intake.wantedState = IntakeStates.ZEROBUTITDOESNTBREAK;
+        driverController.x().whileTrue(new InstantCommand(() -> {
+                if (!Shooter.getInstance().turretAlreadyZeroed) {
+                        Shooter.getInstance().wantedShooterState = ShooterStates.ZEROFIX;
+                        Shooter.getInstance().currentShooterState = ShooterStates.ZEROFIX;
+                }
         })).onFalse(new InstantCommand(() -> {
-                intake.wantedState = IntakeStates.BEYONDMAX;
+                if (!Shooter.getInstance().turretAlreadyZeroed) {
+                        Shooter.getInstance().wantedShooterState = ShooterStates.ZERO;
+                        Shooter.getInstance().currentShooterState = ShooterStates.ZERO;
+                }
         }));
 
         // driverController.b().onTrue(new InstantCommand(() -> {

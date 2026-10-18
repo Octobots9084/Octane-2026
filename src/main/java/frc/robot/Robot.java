@@ -62,6 +62,7 @@ public class Robot extends LoggedRobot {
   private RobotContainer robotContainer;
   public Shooter shooter;
   public static boolean zeroingLights = false;
+  public static boolean zeroingFIXLights = false;
   public Intake intake;
   double timer = Constants.timer.get();
   private static String gameData;

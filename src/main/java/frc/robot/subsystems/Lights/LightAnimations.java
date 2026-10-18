@@ -20,6 +20,8 @@ public enum LightAnimations {
     SHOOTFERRY(new SolidColor(0,65).withColor(new RGBWColor(0, 255, 100, 0))), // Tealish
     SHOOTHUB(new SolidColor(0,65).withColor(new RGBWColor(0, 255, 0, 0))), // Green
     ZEROED(new SolidColor(0,65).withColor(new RGBWColor(0, 0, 250, 100))),//light blue   /**
+    ZEROFIX(new SolidColor(0,65).withColor(new RGBWColor(0, 0, 250, 100))),//light blue   /**
+    ZEROFIXSTALL(new SolidColor(0,65).withColor(new RGBWColor(0, 0, 250, 100))),//light blue   /**
     DISABLED(new SolidColor(0,65).withColor(new RGBWColor(250, 0, 250, 0))),//pink   /**
     DISCONNECTEDCAMERA(new SolidColor(0,65).withColor(new RGBWColor(255, 0, 0, 0))),//violently red
 
@@ -33,6 +35,8 @@ public enum LightAnimations {
 >>>>>>> Stashed changes
    */
 
+    public static StrobeAnimation strobeSlow = new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 0, 0, 0)).withFrameRate(10);
+    public static StrobeAnimation strobeFast = new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 0, 0, 0)).withFrameRate(2);
     public static RainbowAnimation rainbowAnim = new RainbowAnimation(0, 65);
        /**
        * The time
@@ -49,19 +53,23 @@ public enum LightAnimations {
     public static void Lights(){
         if(Vision.getInstance().io.CamerasConnected()){
             if(!Robot.zeroingLights) {
-                if (SwerveSubsystem.getInstance().isInAllianceZone()) {
-                    if (Shooter.getInstance().isAimedAtHub && Shooter.getInstance().isHubActive()) {
-                        Lights.getLightInstance().lightsWantedState = SHOOTHUB;
+                if (!Robot.zeroingFIXLights) {
+                    if (SwerveSubsystem.getInstance().isInAllianceZone()) {
+                        if (Shooter.getInstance().isAimedAtHub && Shooter.getInstance().isHubActive()) {
+                            Lights.getLightInstance().lightsWantedState = SHOOTHUB;
+                        } else {
+                            Lights.getLightInstance().lightsWantedState = CANTSHOOT;
+                        }
                     } else {
-                        Lights.getLightInstance().lightsWantedState = CANTSHOOT;
+                        if (Shooter.getInstance().isAimedAtFerry) {
+                            Lights.getLightInstance().lightsWantedState = SHOOTFERRY;
+                        } else {
+                            Lights.getLightInstance().lightsWantedState = CANTSHOOT;
+
+                        }
                     }
                 } else {
-                    if (Shooter.getInstance().isAimedAtFerry) {
-                        Lights.getLightInstance().lightsWantedState = SHOOTFERRY;
-                    } else {
-                        Lights.getLightInstance().lightsWantedState = CANTSHOOT;
-
-                    }
+                    Lights.getLightInstance().lightsWantedState = ZEROFIX;
                 }
                 } else {
                     Lights.getLightInstance().lightsWantedState = ZEROED;

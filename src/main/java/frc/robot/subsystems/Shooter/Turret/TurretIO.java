@@ -14,22 +14,27 @@ public interface TurretIO {
         // public double turretMotorTemp;
         public double turretRequest;
         public double hoodRequest;
-        // public double turretVoltage;
-        // public double turretCurrent;
         public double turretPositionErr;
         public boolean turretLimitSwitch;
 
         public double turretVelocity;
         public double turretCurrent;
 
-        
         public boolean turretStalled;
-        // inputs.turretZeroFixTime = Shooter.getInstance().turretZeroFixTime;
+        
         public boolean turretMagnetBreak;
-        public double turretMotorVoltage;
         public boolean turretAlreadyZeroed;
+        
+        public double turretVoltage = 0;
+        public double hoodVoltage = 0;
+        public double hoodPositionErr = 0;
+        public double hoodCurrent = 0;
     }
 
+    public default TalonFX getTurretMotor () {
+        return null;
+    }
+    
     public default void updateInputs(TurretIOInputs inputs) {
     }
 
@@ -68,7 +73,7 @@ public interface TurretIO {
     public default void moveTurretAndHoodToZero(){}
 
 
-    public default boolean zeroTurret() {
+    public default boolean zeroTurret(boolean stall) {
         return false;
     }
 

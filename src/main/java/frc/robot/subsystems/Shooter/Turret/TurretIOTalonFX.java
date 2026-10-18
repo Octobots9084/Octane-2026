@@ -12,6 +12,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants;
 import frc.robot.subsystems.Lights.LightAnimations;
 import frc.robot.subsystems.Lights.Lights;
@@ -57,16 +58,25 @@ public class TurretIOTalonFX implements TurretIO {
     }
 
     @Override
+    public TalonFX getTurretMotor () {
+        return turretMotor;
+    }
+
+    @Override
     public void updateInputs(TurretIOInputs inputs) {
         inputs.turretLimitSwitch = turretMagnetBreak.get();
         inputs.hoodPosition = this.getHoodPosition()*360;
         inputs.turretPosition = this.getTurretPosition()*360;
         inputs.hoodRequest = hoodRequest.Position*360;
         inputs.turretRequest = turretRequest.Position*360;
-        // inputs.turretVoltage = this.turretMotor.getMotorVoltage().getValueAsDouble();
+        inputs.turretVoltage = this.turretMotor.getMotorVoltage().getValueAsDouble();
+        inputs.hoodVoltage = this.hoodMotor.getMotorVoltage().getValueAsDouble();
         inputs.turretPositionErr = Math.abs(inputs.turretPosition-inputs.turretRequest);
-        // inputs.turretCurrent = this.turretMotor.getStatorCurrent().getValueAsDouble();
-        // inputs.hoodCurrent = this.hoodMotor.getStatorCurrent().getValueAsDouble();
+        inputs.hoodPositionErr = Math.abs(inputs.hoodPosition-inputs.hoodPosition);
+        inputs.turretCurrent = this.turretMotor.getStatorCurrent().getValueAsDouble();
+        inputs.hoodCurrent = this.hoodMotor.getStatorCurrent().getValueAsDouble();
+
+        inputs.turretAlreadyZeroed = Shooter.getInstance().turretAlreadyZeroed;
     }
 
     @Override
@@ -138,6 +148,7 @@ public class TurretIOTalonFX implements TurretIO {
         hoodMotor.setVoltage(0.5);
         hoodMotor.setPosition(Constants.maximumHoodPosition);
     }
+    
     @Override
     public void zeroTurretPosition() {
         turretMotor.setPosition(Constants.turretZeroPosition);
@@ -153,7 +164,7 @@ public class TurretIOTalonFX implements TurretIO {
     }
 
     @Override
-    public boolean zeroTurret() {
+    public boolean zeroTurret(boolean stall) {
         Shooter shooterIntstance = Shooter.getInstance(); 
         if(!Shooter.getInstance().turretAlreadyZeroed){
             if (!turretMagnetBreak.get()) {
@@ -162,7 +173,11 @@ public class TurretIOTalonFX implements TurretIO {
                 this.setTurretPosition(0);
                 shooterIntstance.turretAlreadyZeroed = true;
             } else {
-                turretMotor.setVoltage(1.25);// was 3v
+                if (stall && DriverStation.isAutonomous()) {
+                    turretMotor.setVoltage(-0.25);
+                } else {
+                    turretMotor.setVoltage(0.75);// was 3v
+                }
                 shooterIntstance.turretAlreadyZeroed = false;//Int everything (sets the instanance to false tp show that the turrent has not been zerod)
             }
         }

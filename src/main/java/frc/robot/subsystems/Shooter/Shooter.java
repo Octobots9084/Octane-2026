@@ -102,7 +102,10 @@ public class Shooter extends SubsystemBase {
 
     double YToHubFerry = 0;
     double XToHubFerry = 0;
+    
+    private Debouncer zeroDebouncer = new Debouncer(0.2, Debouncer.DebounceType.kBoth);
 
+    private boolean stalled = false;
 
     public Shooter(FeederIO fIO, FlywheelIO fwIO, TurretIO tIO, ShooterIO sIO) {
         this.fIO = fIO;
@@ -128,6 +131,10 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (turretStalling()) {
+            Lights.currentLightInstance.lightsWantedState = LightAnimations.ZEROFIXSTALL;
+        } 
+        
         Logger.recordOutput("Shooter/ferryOverride", ferryOverride);
         Logger.recordOutput("Shooter/driverOverride", driverOverride);
         Logger.recordOutput("Shooter/coDriverOverride", coDriverOverride);
@@ -448,13 +455,26 @@ public class Shooter extends SubsystemBase {
                 
                 break;
             case ZERO:
-                //makes the turret figure out where it is
-                Robot.zeroingLights = true;
-                turret.io.zeroHoodMotor();
-                if(turret.io.zeroTurret()){
-                    wantedShooterState = ShooterStates.HUB;
-                    Robot.zeroingLights = false;
+                turretStalling();
+                if (!stalled) {
+                    //makes the turret figure out where it is
+                    Robot.zeroingLights = true;
+                    turret.io.zeroHoodMotor();
+                    if(turret.io.zeroTurret(false)){
+                        wantedShooterState = ShooterStates.HUB;
+                        Robot.zeroingLights = false;
+                    }
+                } else {
+                    turret.io.zeroHoodMotor();
+                    if(turret.io.zeroTurret(true)){
+                        wantedShooterState = ShooterStates.HUB;
+                        Robot.zeroingLights = false;
+                    }
                 }
+                break;
+            case ZEROFIX:
+                    turret.io.getTurretMotor().setVoltage(-3);
+                    Lights.currentLightInstance.lightsWantedState = LightAnimations.ZEROFIX;
                 break;
             default:
                 break;
@@ -491,7 +511,12 @@ public class Shooter extends SubsystemBase {
                 currentShooterState = ShooterStates.UNJAM;
                 break;
             case ZERO:
-                currentShooterState = ShooterStates.ZERO;
+                if (currentShooterState != ShooterStates.ZEROFIX) {
+                    currentShooterState = ShooterStates.ZERO;
+                }
+                break;
+            case ZEROFIX:
+                currentShooterState = ShooterStates.ZEROFIX;
                 break;
             case FERRY:
                 if (!swerve.isTilted(0, 3)) {// !tilted and in alliance
@@ -518,6 +543,16 @@ public class Shooter extends SubsystemBase {
                 currentShooterState = ShooterStates.HUB;
                 break;
         }
+    }
+
+    
+    public boolean turretStalling () {
+        if (zeroDebouncer.calculate(Math.abs(turret.io.getTurretMotor().getVelocity().getValueAsDouble()) < .5 && Math.abs(turret.io.getTurretMotor().getStatorCurrent().getValueAsDouble()) > 30)) {
+            stalled = true;
+            return true;
+        }
+
+        return false;
     }
 
     /**

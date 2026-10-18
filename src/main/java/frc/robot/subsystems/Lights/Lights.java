@@ -65,6 +65,12 @@ public class Lights extends SubsystemBase{
              case ZEROED:
                 lightsCurrentState = LightAnimations.ZEROED;//implemented
                 break;
+             case ZEROFIX:
+                lightsCurrentState = LightAnimations.ZEROFIX;//implemented
+                break;
+             case ZEROFIXSTALL:
+                lightsCurrentState = LightAnimations.ZEROFIXSTALL;//implemented
+                break;
             case REVERSEINTAKING:
                 lightsCurrentState = LightAnimations.REVERSEINTAKING;//implemented
                 break;
@@ -101,9 +107,13 @@ public class Lights extends SubsystemBase{
     }
 
     public void applyStates() {
-
+        if (lightsCurrentState == LightAnimations.ZEROFIX) {
+            device.candle.setControl(LightAnimations.strobeSlow);
+        } else if (lightsCurrentState == LightAnimations.ZEROFIXSTALL) {
+            device.candle.setControl(LightAnimations.strobeFast);
+        } else {
             device.candle.setControl(lightsCurrentState.color);
-
         }
     }
+}
        
