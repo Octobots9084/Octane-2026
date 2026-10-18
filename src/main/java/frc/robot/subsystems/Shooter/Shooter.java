@@ -103,7 +103,7 @@ public class Shooter extends SubsystemBase {
     double YToHubFerry = 0;
     double XToHubFerry = 0;
     
-    private Debouncer zeroDebouncer = new Debouncer(0.2, Debouncer.DebounceType.kBoth);
+    private Debouncer zeroDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
 
     private boolean stalled = false;
 
@@ -547,7 +547,11 @@ public class Shooter extends SubsystemBase {
 
     
     public boolean turretStalling () {
-        if (zeroDebouncer.calculate(Math.abs(turret.io.getTurretMotor().getVelocity().getValueAsDouble()) < .5 && Math.abs(turret.io.getTurretMotor().getStatorCurrent().getValueAsDouble()) > 30)) {
+        // if (zeroDebouncer.calculate(Math.abs(turret.io.getTurretMotor().getVelocity().getValueAsDouble()) < .5 && Math.abs(turret.io.getTurretMotor().getStatorCurrent().getValueAsDouble()) > 20)) {
+        //     stalled = true;
+        //     return true;
+        // }
+        if (zeroDebouncer.calculate(Math.abs(turret.io.getTurretMotor().getVelocity().getValueAsDouble()) < .1)) {
             stalled = true;
             return true;
         }
