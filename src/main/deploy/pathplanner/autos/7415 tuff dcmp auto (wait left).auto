@@ -19,7 +19,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 8.0
+            "waitTime": 5.0
           }
         },
         {
@@ -50,18 +50,6 @@
           "type": "path",
           "data": {
             "pathName": "Left Sendy Q122"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartShoot"
           }
         }
       ]

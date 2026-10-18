@@ -487,6 +487,9 @@ public class Shooter extends SubsystemBase {
                     }
                 }
                 break;
+            case UNJAM:
+                currentShooterState = ShooterStates.UNJAM;
+                break;
             case ZERO:
                 currentShooterState = ShooterStates.ZERO;
                 break;
