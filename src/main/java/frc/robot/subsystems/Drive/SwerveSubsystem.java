@@ -87,6 +87,9 @@ public class SwerveSubsystem extends SubsystemBase {
    * <br></br><b>Default State</b> - {@link frc.robot.subsystems.Drive.SwerveStates#IDLE IDLE}
    * @param SwerveStates The swerve states contain no information - {@link frc.robot.subsystems.Drive.SwerveStates SwerveStates}
    */
+
+    public double xLimit = 1;
+    public double yLimit = 1;
     public SwerveStates currentState = SwerveStates.IDLE;
     public SwerveIO io;
     public CommandXboxController driverController;
@@ -184,6 +187,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        xLimit = SmartDashboard.getNumber("xLimit", 1.0);
+        yLimit = SmartDashboard.getNumber("yLimit", 1.0);
         this.io.updateInputs(inputs);
         Logger.processInputs("Swerve", inputs);
         currentState = handleStateTransition();
@@ -515,7 +520,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         double angularVelocity = angularMagnitude * maxAngularVelocity;
 
-        double[] v = limitAccel(xVelocity, yVelocity);
+        double[] v = limitAccel(xVelocity*xLimit, yVelocity*yLimit);
 
         if (Constants.isBlueAlliance) {   
             return new ChassisSpeeds(-v[0], -v[1], angularVelocity);
@@ -651,8 +656,8 @@ public class SwerveSubsystem extends SubsystemBase {
             }
         }
         double angularMagnitude = -MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
-        double xVelocity = xMagnitude * maxVelocity;
-        double yVelocity = yMagnitude * maxVelocity;
+        double xVelocity = xMagnitude * maxVelocity*xLimit;
+        double yVelocity = yMagnitude * maxVelocity*yLimit;
 
         double RotVelocity = angularPidcontroller.calculate(getRobotPose().getRotation().getRadians(),rotLockAngle);
 

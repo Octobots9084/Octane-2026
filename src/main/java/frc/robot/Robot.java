@@ -70,6 +70,8 @@ public class Robot extends LoggedRobot {
   public static boolean TeleopStarted = false;
   public static boolean isAllianceSet = false;
   public Robot() {
+        SmartDashboard.putNumber("xLimit", 1.0);
+        SmartDashboard.putNumber("yLimit", 1.0);
     // Set up data receivers & replay source
     switch (Constants.currentMode) {
       case REAL:
