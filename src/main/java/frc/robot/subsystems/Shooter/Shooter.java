@@ -103,7 +103,7 @@ public class Shooter extends SubsystemBase {
     double YToHubFerry = 0;
     double XToHubFerry = 0;
     
-    private Debouncer zeroDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
+    private Debouncer zeroDebouncer = new Debouncer(0.5, Debouncer.DebounceType.kBoth);
 
     private boolean stalled = false;
 
@@ -487,6 +487,9 @@ public class Shooter extends SubsystemBase {
         if ((currentShooterState == ShooterStates.AUTOHUB || currentShooterState == ShooterStates.AUTODEPOTSHOOT) && wantedShooterState != currentShooterState)
             flywheelDebouncer = flywheelToleranceThreshold;
         switch (wantedShooterState) {
+            case SAFE:
+                currentShooterState = ShooterStates.SAFE;
+            break;
             case AUTOHUB:
                 currentShooterState = ShooterStates.AUTOHUB;
                 break;
@@ -540,7 +543,10 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             default:
-                currentShooterState = ShooterStates.HUB;
+                // if (DriverStation.isAutonomousEnabled()) {
+
+                // }
+                // currentShooterState = ShooterStates.HUB;
                 break;
         }
     }
@@ -551,10 +557,10 @@ public class Shooter extends SubsystemBase {
         //     stalled = true;
         //     return true;
         // }
-        if (zeroDebouncer.calculate(Math.abs(turret.io.getTurretMotor().getVelocity().getValueAsDouble()) < .1)) {
-            stalled = true;
-            return true;
-        }
+            if (zeroDebouncer.calculate(Math.abs(turret.io.getTurretMotor().getVelocity().getValueAsDouble()) < .05 && (currentShooterState == ShooterStates.ZERO || currentShooterState == ShooterStates.ZEROFIX))) {
+                stalled = true;
+                return true;
+            }
 
         return false;
     }

@@ -11,7 +11,7 @@ import java.nio.file.StandardOpenOption;
 public class CreateAutoDuplicates {
 
 
-    private static String oldAutoName = "Wait Left";//DONT DO \"    //put the path name here to duplicate, it will go in Generated Flipped Autos by default
+    private static String oldAutoName = "Wait Left test";//DONT DO \"    //put the path name here to duplicate, it will go in Generated Flipped Autos by default
     private static String goalAutoFolder = "Right";//DONT DO \"    //put the auto folder here if you dont want it in Generated Flipped Autos
     public static String goalPathFolder = "Right Side";//DONT DO \"    //put the path folder here if you dont want it in Generated Flipped Paths
 

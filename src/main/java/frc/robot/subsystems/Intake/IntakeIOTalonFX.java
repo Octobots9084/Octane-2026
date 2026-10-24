@@ -93,7 +93,7 @@ public class IntakeIOTalonFX implements IntakeIO {
           inputs.rollerVoltage = rollerVoltage.getValueAsDouble();
           inputs.pivotCurrent = pivotCurrent.getValueAsDouble();
           inputs.pivotLimitSwitch = this.isZeroingSwitchPressed();
-          inputs.intakePivotStalled = this.intakePivotStalled();
+          inputs.intakePivotStalled = this.intakeStalling();
           inputs.pivotVelocity = pivot.getVelocity().getValueAsDouble();
      }
 
@@ -132,7 +132,7 @@ public class IntakeIOTalonFX implements IntakeIO {
 
      public boolean intakePivotStalled() {
           // return pivot.getFault_StatorCurrLimit().getValue();turretMotor
-          return false;
+          return intakeStalling();
      }
 
      public boolean zeroIntake() {
@@ -148,8 +148,8 @@ public class IntakeIOTalonFX implements IntakeIO {
      //    }
      //    return !pressed;
 
-          pivot.setVoltage(1);
-          pivotfollower.setVoltage(1);
+          pivot.setVoltage(3);
+          pivotfollower.setVoltage(3);
 
           if (intakeStalling()) {
                Intake.getInstance().alreadyZeroed = true;

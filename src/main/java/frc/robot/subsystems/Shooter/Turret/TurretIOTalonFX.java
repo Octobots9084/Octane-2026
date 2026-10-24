@@ -79,7 +79,7 @@ public class TurretIOTalonFX implements TurretIO {
         inputs.turretAlreadyZeroed = Shooter.getInstance().turretAlreadyZeroed;
         inputs.turretVelocity = this.turretMotor.getVelocity().getValueAsDouble();
 
-        inputs.turretStalled = turretStalled();
+        inputs.turretStalled = Shooter.getInstance().turretStalling();
     }
 
     @Override
@@ -177,6 +177,8 @@ public class TurretIOTalonFX implements TurretIO {
                 shooterIntstance.turretAlreadyZeroed = true;
             } else {
                 if (stall && DriverStation.isAutonomous()) {
+
+
                     turretMotor.setVoltage(-0.75);
                 } else {
                     turretMotor.setVoltage(0.75);// was 3v

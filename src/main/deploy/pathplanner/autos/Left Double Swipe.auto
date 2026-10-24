@@ -5,21 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "StartShoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Wait Left Start Q122"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShoot"
           }
         },
         {

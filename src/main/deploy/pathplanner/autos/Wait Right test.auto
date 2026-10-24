@@ -1,0 +1,73 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "testWait Right Start Q122"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 6.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "testWait Right Sweep Single"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Sweep 2"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Right",
+  "choreoAuto": false
+}
